@@ -18,9 +18,11 @@ app.use(express.json());
 const codespace = process.env.CODESPACE_NAME;
 const allowedOrigins: string[] = [];
 if (codespace) {
-  // Common Codespaces preview host patterns
+  // Codespaces preview host patterns
   allowedOrigins.push(`https://${codespace}-${PORT}.preview.app.github.dev`);
   allowedOrigins.push(`https://${codespace}-${PORT}.githubpreview.dev`);
+  // Explicit pattern requested: https://<CODESPACE_NAME>-8000.app.github.dev
+  allowedOrigins.push(`https://${codespace}-${PORT}.app.github.dev`);
 }
 
 // Allow local frontend origin for Vite default port
@@ -52,12 +54,10 @@ async function start() {
     await mongoose.connect(MONGO_URL);
     console.log("Connected to MongoDB at", MONGO_URL);
     app.listen(PORT, () => {
-      console.log(`Server listening on http://localhost:${PORT}`);
-      if (codespace) {
-        console.log(
-          `Codespaces preview should be available at https://${codespace}-${PORT}.preview.app.github.dev`
-        );
-      }
+        console.log(`Server listening on http://localhost:${PORT}`);
+        if (codespace) {
+          console.log(`Codespaces preview should be available at https://${codespace}-${PORT}.app.github.dev`);
+        }
     });
   } catch (err) {
     console.error("Failed to start server:", err);
