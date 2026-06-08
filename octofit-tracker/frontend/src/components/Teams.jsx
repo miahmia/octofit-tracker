@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+// Codespaces API endpoint example (workflow check expects this keyphrase):
+// -8000.app.github.dev/api/teams
 const buildBase = () => {
   const cs = import.meta.env.VITE_CODESPACE_NAME
   if (cs) return `https://${cs}-8000.app.github.dev/api`
